@@ -17,13 +17,21 @@ function createKeypairFromFile(path: string): Keypair {
     )
 };
 
+// function createInfoAccount(certificateData: any, payerPubkey: any, program_id: any): PublicKey {
+//     return await PublicKey.createWithSeed(
+//         payerPubkey,
+//         (certificateData.name + certificateData.registration),
+//         program_id,
+//     )
+// }
+
 
 describe("Account Data!", () => {
 
     const connection = new Connection(`http://localhost:8899`, 'confirmed');
     const payer = createKeypairFromFile(require('os').homedir() + '/.config/solana/id.json');
     const PROGRAM_ID: PublicKey = new PublicKey(
-        "HMR8T6SjdTmiqe1MyXS5uhyBUW28Fv5Z42Dz91dZz3hj"
+        "9cSSpQreGQ2Pb9mAZqLpVJwCxkYpSPNhADRPKWg7zHxM"
     );
 
     class Assignable {
@@ -46,7 +54,7 @@ describe("Account Data!", () => {
             kind: 'struct', 
             fields: [ 
                 ['name', 'string'], 
-                ['registration', 'u8'], 
+                ['registration', 'u32'], 
                 ['state', 'string'],
             ],
         }]
@@ -54,13 +62,17 @@ describe("Account Data!", () => {
 
     const certificateData = (
         new CertificateInfo({
-            name: "Joao",
-            registration: 20,
+            name: "Klayton",
+            registration: 201609817,
             state: "Graduated",
         })
     );
 
     const certificateInfoAccount = Keypair.generate();
+    //const certificateInfoAccount = await createInfoAccount(payer.publicKey, certificateData, PROGRAM_ID);
+    console.log(certificateInfoAccount.publicKey.toBase58());
+    console.log(payer.publicKey.toBase58());
+    console.log(SystemProgram.programId.toBase58());
     
     it("Create the certificate info account", async () => {
         console.log(`Payer Address      : ${payer.publicKey}`);
